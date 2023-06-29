@@ -100,8 +100,8 @@ class MatchFilterTest extends TestCase
         $resourceClassResolverProphecy->isResourceClass(Foo::class)->willReturn(true)->shouldBeCalled();
 
         $nameConverterProphecy = $this->prophesize(NameConverterInterface::class);
-        $nameConverterProphecy->normalize('foo.bar', Foo::class, null, Argument::type('array'))->willReturn('foo.bar')->shouldBeCalled();
-        $nameConverterProphecy->normalize('foo', Foo::class, null, Argument::type('array'))->willReturn('foo')->shouldBeCalled();
+        $nameConverterProphecy->normalize('foo.foo.bar', Foo::class, null, Argument::type('array'))->willReturn('foo.foo.bar')->shouldBeCalled();
+        $nameConverterProphecy->normalize('foo.foo', Foo::class, null, Argument::type('array'))->willReturn('foo.foo')->shouldBeCalled();
 
         $matchFilter = new MatchFilter(
             $this->prophesize(PropertyNameCollectionFactoryInterface::class)->reveal(),
@@ -110,12 +110,12 @@ class MatchFilterTest extends TestCase
             $this->prophesize(IriConverterInterface::class)->reveal(),
             $this->prophesize(PropertyAccessorInterface::class)->reveal(),
             $nameConverterProphecy->reveal(),
-            ['foo.bar' => null]
+            ['foo.foo.bar' => null]
         );
 
         self::assertSame(
-            ['bool' => ['must' => [['nested' => ['path' => 'foo', 'query' => ['match' => ['foo.bar' => 'Krupicka']]]]]]],
-            $matchFilter->apply([], Foo::class, null, ['filters' => ['foo.bar' => 'Krupicka']])
+            ['bool' => ['must' => [['nested' => ['path' => 'foo', 'query' => ['nested' => ['path' => 'foo.foo', 'query' => ['match' => ['foo.foo.bar' => 'Krupicka']]]]]]]]],
+            $matchFilter->apply([], Foo::class, null, ['filters' => ['foo.foo.bar' => 'Krupicka']])
         );
     }
 
@@ -132,8 +132,8 @@ class MatchFilterTest extends TestCase
         $resourceClassResolverProphecy->isResourceClass(Foo::class)->willReturn(true)->shouldBeCalled();
 
         $nameConverterProphecy = $this->prophesize(NameConverterInterface::class);
-        $nameConverterProphecy->normalize('foo.bar', Foo::class, null, Argument::type('array'))->willReturn('foo.bar')->shouldBeCalled();
-        $nameConverterProphecy->normalize('foo', Foo::class, null, Argument::type('array'))->willReturn('foo')->shouldBeCalled();
+        $nameConverterProphecy->normalize('foo.foo.bar', Foo::class, null, Argument::type('array'))->willReturn('foo.foo.bar')->shouldBeCalled();
+        $nameConverterProphecy->normalize('foo.foo', Foo::class, null, Argument::type('array'))->willReturn('foo.foo')->shouldBeCalled();
 
         $matchFilter = new MatchFilter(
             $this->prophesize(PropertyNameCollectionFactoryInterface::class)->reveal(),
@@ -142,12 +142,12 @@ class MatchFilterTest extends TestCase
             $this->prophesize(IriConverterInterface::class)->reveal(),
             $this->prophesize(PropertyAccessorInterface::class)->reveal(),
             $nameConverterProphecy->reveal(),
-            ['foo.bar' => null]
+            ['foo.foo.bar' => null]
         );
 
         self::assertSame(
-            ['bool' => ['must' => [['nested' => ['path' => 'foo', 'query' => ['match' => ['foo.bar' => 'Krupicka']]]]]]],
-            $matchFilter->apply([], Foo::class, null, ['filters' => ['foo.bar' => 'Krupicka']])
+            ['bool' => ['must' => [['nested' => ['path' => 'foo', 'query' => ['nested' => ['path' => 'foo.foo', 'query' => ['match' => ['foo.foo.bar' => 'Krupicka']]]]]]]]],
+            $matchFilter->apply([], Foo::class, null, ['filters' => ['foo.foo.bar' => 'Krupicka']])
         );
     }
 
